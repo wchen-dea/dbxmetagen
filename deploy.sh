@@ -170,6 +170,52 @@ if [ "$_have_catalog" = false ]; then
     echo ""
 fi
 
+# --- Pre-flight: require a real SQL warehouse ID before bundle deploy. The app
+# resource maps this variable to `sql_warehouse`, so an example/placeholder ID
+# causes the Apps API to fail after the bundle has already uploaded files. ---
+_warehouse_value=""
+_warehouse_source=""
+# CLI --var values (including values forwarded from {target}.env) have the
+# highest precedence among the sources this wrapper supplies.
+for ((i=0; i<${#DEPLOY_VARS[@]}; i++)); do
+    if [ "${DEPLOY_VARS[$i]}" = "--var" ] && [ $((i + 1)) -lt ${#DEPLOY_VARS[@]} ]; then
+        _assignment="${DEPLOY_VARS[$((i + 1))]}"
+        case "$_assignment" in
+            warehouse_id=*) _warehouse_value="${_assignment#warehouse_id=}"; _warehouse_source="${ENV_FILE}" ;;
+        esac
+    fi
+done
+if [ -z "$_warehouse_value" ] && [ -n "${BUNDLE_VAR_warehouse_id:-}" ]; then
+    _warehouse_value="$BUNDLE_VAR_warehouse_id"
+    _warehouse_source="BUNDLE_VAR_warehouse_id"
+fi
+_override_file=".databricks/bundle/${TARGET}/variable-overrides.json"
+if [ -z "$_warehouse_value" ] && [ -f "$_override_file" ]; then
+    _warehouse_value=$(python3 - "$_override_file" <<'PY'
+import json
+import sys
+
+with open(sys.argv[1], encoding="utf-8") as f:
+    value = json.load(f).get("warehouse_id", "")
+print(value if isinstance(value, str) else "")
+PY
+    )
+    _warehouse_source="$_override_file"
+fi
+
+case "$_warehouse_value" in
+    ""|your_warehouse_id|0123456789abcdef|placeholder|YOUR_WAREHOUSE_ID)
+        echo "" >&2
+        echo "Error: no valid warehouse_id configured for target '${TARGET}'." >&2
+        echo "       '${_warehouse_source:-bundle default}' is empty or a placeholder." >&2
+        echo "       Set the SQL warehouse ID from SQL Warehouses > <warehouse> > Connection details in:" >&2
+        echo "         ${_override_file}" >&2
+        echo "       or ${ENV_FILE} (legacy), BUNDLE_VAR_warehouse_id, or --var warehouse_id=..." >&2
+        echo "" >&2
+        exit 1
+        ;;
+esac
+
 # --- Deploy (wheel builds via the artifacts.build hook) ---
 # The app_lifecycle variable defaults to {} (no `started` field), which is safe on
 # BOTH deploy engines -- so this build never trips the terraform engine's

@@ -1,8 +1,8 @@
 {
   "_comment_path": "Copy this file to .databricks/bundle/<target>/variable-overrides.json -- DAB auto-loads that EXACT path (a repo-root copy is NOT picked up). On a fresh clone that folder does not exist yet: run `mkdir -p .databricks/bundle/dev` first (match your -t target).",
-  "catalog_name": "my_catalog",
-  "schema_name": "metadata_results",
-  "warehouse_id": "0123456789abcdef",
+  "catalog_name": "quickstart_catalog",
+  "schema_name": "multi_agent_schema",
+  "warehouse_id": "b20f70f71c2f52e2",
   "vs_endpoint_name": "dbxmetagen-vs",
   "enable_obo": false,
 
