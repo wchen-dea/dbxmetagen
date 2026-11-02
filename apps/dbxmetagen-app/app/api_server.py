@@ -9705,7 +9705,12 @@ def _run_sl_generation(
             error_str = "; ".join(errors).replace("'", "''") if errors else ""
             proj_val = f"'{project_id}'" if project_id else "NULL"
             execute_sql(
-                f"INSERT INTO {fq('metric_view_definitions')} VALUES "
+                f"INSERT INTO {fq('metric_view_definitions')} ("
+                "definition_id, metric_view_name, source_table, json_definition, "
+                "source_questions, status, validation_errors, genie_space_id, "
+                "created_at, applied_at, version, parent_definition_id, project_id, "
+                "complexity_score, complexity_level, deployed_catalog, deployed_schema, "
+                "quality_score, quality_level) VALUES "
                 f"('{defn_id}', '{mv_name}', '{source}', :json_def, '', "
                 f"'{status}', '{error_str}', NULL, '{now}', NULL, 1, NULL, {proj_val}, "
                 f"{cx['complexity_score']}, '{cx['complexity_level']}', NULL, NULL, "
@@ -9989,7 +9994,12 @@ def _update_definition_row(definition_id: str, defn: dict, status: str, errors: 
     cx = _score_definition_complexity(defn, available_cols=_mv_available_cols(defn))
     json_str = json.dumps(defn)
     execute_sql(
-        f"INSERT INTO {fq('metric_view_definitions')} VALUES ("
+        f"INSERT INTO {fq('metric_view_definitions')} ("
+        "definition_id, metric_view_name, source_table, json_definition, "
+        "source_questions, status, validation_errors, genie_space_id, "
+        "created_at, applied_at, version, parent_definition_id, project_id, "
+        "complexity_score, complexity_level, deployed_catalog, deployed_schema, "
+        "quality_score, quality_level) VALUES ("
         f"'{new_id}', '{mv_name}', '{source_table}', :json_def, '{source_qs}', "
         f"'{status}', '{error_esc}', NULL, '{now}', NULL, {new_version}, '{definition_id}', {proj_val}, "
         f"{cx['complexity_score']}, '{cx['complexity_level']}', NULL, NULL, "
