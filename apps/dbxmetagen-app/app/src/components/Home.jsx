@@ -1,4 +1,5 @@
 import React from 'react'
+import { useViewMode } from '../hooks/useViewMode'
 
 /**
  * Two-door landing. The app's primary entry point: the user picks one of two
@@ -49,7 +50,14 @@ const SECONDARY = [
   { id: 'genie', label: 'Build Genie space', desc: 'Natural-language SQL over your data' },
 ]
 
+// Mirror of App.jsx SIMPLIFIED_TABS: destinations that still exist in simplified view.
+// Home must not surface doors/links that route to advanced-only tabs (they would bounce
+// back to Generate), so both the semantic-layer door and the secondary links are gated.
+const SIMPLIFIED_DESTS = new Set(['home', 'jobs', 'metadata', 'guide', 'context'])
+
 export default function Home({ onNavigate }) {
+  const { simplified } = useViewMode()
+  const secondary = simplified ? SECONDARY.filter(s => SIMPLIFIED_DESTS.has(s.id)) : SECONDARY
   return (
     <div className="max-w-6xl mx-auto py-6">
       <div className="rounded-2xl bg-gradient-to-br from-dbx-navy via-dbx-navy-700 to-dbx-navy-600 px-6 py-8 md:px-10 md:py-10 text-white shadow-elevated mb-8 overflow-hidden relative">
@@ -81,7 +89,7 @@ export default function Home({ onNavigate }) {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div className={`grid grid-cols-1 gap-5 ${simplified ? 'max-w-md mx-auto' : 'md:grid-cols-2'}`}>
         <DoorCard
           accent="#D97706"
           eyebrow="Foundation layer"
@@ -96,20 +104,24 @@ export default function Home({ onNavigate }) {
           cta="Generate source metadata"
           onClick={() => onNavigate('jobs')}
         />
-        <DoorCard
-          accent="#0E7490"
-          eyebrow="Decision layer"
-          title="Build retail semantic intelligence"
-          description="Turn governed SBS metadata into a connected semantic layer for merchandising, inventory, store operations, and customer experience."
-          bullets={[
-            'Metric views for sales, inventory & service KPIs',
-            'Vector index for natural-language discovery',
-            'Knowledge graph across retail entities',
-            'Metadata remains the governed foundation',
-          ]}
-          cta="Build retail semantic layer"
-          onClick={() => onNavigate('semantic')}
-        />
+        {/* Semantic layer is an advanced-only surface (hidden tab in simplified view),
+            so the door is hidden there too — otherwise it dead-ends back to Generate. */}
+        {!simplified && (
+          <DoorCard
+            accent="#0E7490"
+            eyebrow="Decision layer"
+            title="Build retail semantic intelligence"
+            description="Turn governed SBS metadata into a connected semantic layer for merchandising, inventory, store operations, and customer experience."
+            bullets={[
+              'Metric views for sales, inventory & service KPIs',
+              'Vector index for natural-language discovery',
+              'Knowledge graph across retail entities',
+              'Metadata remains the governed foundation',
+            ]}
+            cta="Build retail semantic layer"
+            onClick={() => onNavigate('semantic')}
+          />
+        )}
       </div>
 
       <div className="mt-8 border-t border-slate-200 dark:border-dbx-navy-400/30 pt-5">
@@ -117,7 +129,7 @@ export default function Home({ onNavigate }) {
           Continue exploring the SBS data platform
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-          {SECONDARY.map(s => (
+          {secondary.map(s => (
             <button
               key={s.id}
               onClick={() => onNavigate(s.id)}
