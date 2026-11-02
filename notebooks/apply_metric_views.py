@@ -1,9 +1,9 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # Apply Metric Views & Create Genie Space
+# MAGIC # Apply Metric Views & Create Genie Agent
 # MAGIC
 # MAGIC Reads validated metric view definitions and creates them in Unity Catalog.
-# MAGIC Optionally creates a Genie space for natural language data exploration.
+# MAGIC Optionally creates a Genie Agent for natural language data exploration.
 
 # COMMAND ----------
 
@@ -16,7 +16,7 @@
 dbutils.widgets.text("catalog_name", "", "Catalog Name")
 dbutils.widgets.text("schema_name", "", "Schema Name")
 dbutils.widgets.text("warehouse_id", "", "Warehouse ID (for Genie)")
-dbutils.widgets.text("genie_space_name", "", "Genie Space Name (optional)")
+dbutils.widgets.text("genie_space_name", "", "Genie Agent Name (optional)")
 
 catalog_name = dbutils.widgets.get("catalog_name")
 schema_name = dbutils.widgets.get("schema_name")
@@ -44,11 +44,11 @@ print(f"Applied: {result['applied']}, Failed: {result['failed']}")
 if genie_space_name and warehouse_id:
     space_id = gen.create_genie_space(genie_space_name, warehouse_id)
     if space_id:
-        print(f"Genie space created: {space_id}")
+        print(f"Genie Agent created: {space_id}")
     else:
-        print("Genie space creation skipped or failed (see logs)")
+        print("Genie Agent creation skipped or failed (see logs)")
 else:
-    print("Skipping Genie space creation (no name or warehouse_id provided)")
+    print("Skipping Genie Agent creation (no name or warehouse_id provided)")
 
 # COMMAND ----------
 

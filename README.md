@@ -4,7 +4,7 @@
 
 <img src="images/DBXMetagen_arch_hl.png" alt="High-level DBXMetagen Architecture" width="800" />
 
-**dbxmetagen** turns raw Unity Catalog tables into governed, AI-queryable knowledge. It generates AI-reviewed metadata (descriptions, PII/PHI/PCI tags, business-domain classification), maps formalized ontologies to your schema, predicts join keys, builds a knowledge graph and retrieval layer on top, and uses that model to auto-generate a semantic layer (UC metric views) and Genie spaces, with human review at every step. The pipeline runs in four stages:
+**dbxmetagen** turns raw Unity Catalog tables into governed, AI-queryable knowledge. It generates AI-reviewed metadata (descriptions, PII/PHI/PCI tags, business-domain classification), maps formalized ontologies to your schema, predicts join keys, builds a knowledge graph and retrieval layer on top, and uses that model to auto-generate a semantic layer (UC metric views) and Genie Agents, with human review at every step. The pipeline runs in four stages:
 
 **1. Metadata generation**: the foundation
 
@@ -26,7 +26,7 @@
 **3. Semantic layer & Genie**: a business model from your data
 
 - **Metric view generation**: Generate UC metric views (measures, dimensions, joins, filtered measures, windows) with SQL validation, deduplication, and autofix
-- **Genie space builder**: Generate Genie spaces with instructions and example SQL, and **pull curated SQL from existing Genie spaces to seed new metric views** (cover a data-mart layer without touching the room)
+- **Genie Agent builder**: Generate Genie Agents with instructions and example SQL, and **pull curated SQL from existing Genie Agents to seed new metric views** (cover a data-mart layer without touching the room)
 - **ERD recommender**: Hybrid LLM + heuristic engine that proposes metric-view structure from your table relationships
 
 **4. Agents & serving**: explore it in natural language
@@ -37,13 +37,13 @@
 
 The core value is **metadata generation and a governed knowledge graph**. The dashboard drives the
 full lifecycle, but every output is a standard Delta table or Vector Search index you can consume
-from any tool: notebooks, dashboards, Genie spaces, agents, or your own applications.
+from any tool: notebooks, dashboards, Genie Agents, agents, or your own applications.
 
 *Just want to get it running? Jump to the [**Quickstart**](#quickstart): deploy is Step 0 through Step 3, and [your first run](#your-first-run) is right after.*
 
 > [!NOTE]
 > **dbxmetagen is a Solutions Accelerator.** Every output — comments, PII/PHI/PCI tags, domain
-> classifications, ontology mappings, FK predictions, metric views, Genie spaces — is AI-generated
+> classifications, ontology mappings, FK predictions, metric views, Genie Agents — is AI-generated
 > and meant to be reviewed by a human before it's applied or trusted. Nothing touches your catalog
 > until you review and apply it (`apply_ddl=false` by default). See [Human Review](#human-review).
 
@@ -287,7 +287,7 @@ The `examples/` notebooks show how to use dbxmetagen as a **standalone pip-insta
 | `examples/02_build_knowledge_bases.py`   | Structured KB tables from raw metadata                              |
 | `examples/03_build_analytics.py`         | Graph, ontology, embeddings, profiling, FK prediction, quality      |
 | `examples/04_generate_semantic_layer.py` | Metric view definitions from business questions                     |
-| `examples/05_create_genie_spaces.py`     | Genie spaces with auto-splitting for large schemas                  |
+| `examples/05_create_genie_spaces.py`     | Genie Agents with auto-splitting for large schemas                  |
 
 
 ## Disclaimer
@@ -535,7 +535,7 @@ Core functions exported by the `dbxmetagen` package:
 | `compute_data_quality(spark, catalog, schema)`        | Compute data quality scores                             |
 | `predict_foreign_keys(spark, catalog, schema)`        | Predict FK relationships using AI + heuristics          |
 | `build_vector_index(spark, catalog, schema)`          | Build or refresh Vector Search index over metadata      |
-| `build_genie_space(spark, catalog, schema)`           | Create Genie space from knowledge base                  |
+| `build_genie_space(spark, catalog, schema)`           | Create Genie Agent from knowledge base                  |
 | `generate_semantic_layer(spark, catalog, schema)`     | Generate metric view definitions                        |
 | `classify_columns_geo(spark, catalog, schema)`        | Geographic column classification                        |
 
@@ -580,7 +580,7 @@ The app is in `apps/dbxmetagen-app/` and provides a FastAPI backend with a React
 
 - **Generate Metadata** -- Trigger core (descriptions, sensitivity, domain) and advanced (ontology, FK, knowledge graph) jobs with model selection, Customer Context management
 - **Define Metrics** -- Auto-generated metric views with SQL expression autofix, KPI Library grouped by Question Profile
-- **Build Genie Space** -- Create and configure Genie spaces with auto-generated instructions and example SQL queries
+- **Build Genie Agent** -- Create and configure Genie Agents with auto-generated instructions and example SQL queries
 
 **Review:**
 
@@ -609,7 +609,7 @@ The app is in `apps/dbxmetagen-app/` and provides a FastAPI backend with a React
 | `ontology_prediction_job`          | Ontology discovery and validation                                                                                                                                                                                                                                                                              |
 | `profiling_job`                    | Table profiling, quality scoring, and graph quality update                                                                                                                                                                                                                                                     |
 | `fk_prediction_job`                | Foreign key prediction with column similarity and AI judgment                                                                                                                                                                                                                                                  |
-| `semantic_layer_job`               | Generate metric views and apply to Genie spaces                                                                                                                                                                                                                                                                |
+| `semantic_layer_job`               | Generate metric views and apply to Genie Agents                                                                                                                                                                                                                                                                |
 | `sync_graph_lakebase_job`          | Sync graph data to Lakebase for the dashboard                                                                                                                                                                                                                                                                  |
 | `build_vector_index_job`           | Rebuild the metadata vector search index (serverless). Deployed with a weekly schedule (Sun 02:00 UTC) but **paused by default** -- unpause in the Workflows UI to keep the index fresh automatically. Without it the index only updates on full pipeline runs or manual "Sync Vector Index" clicks in the app |
 | `build_knowledge_graph_job`        | Rebuild knowledge graph nodes and edges (serverless). Use after reviewing foreign keys to propagate approve/reject decisions without re-running the full pipeline                                                                                                                                              |

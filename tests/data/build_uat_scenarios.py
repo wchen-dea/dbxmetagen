@@ -250,7 +250,7 @@ def build_star_retail():
     for t in ["dim_customer", "dim_product", "dim_store", "dim_date", "fct_sales"]:
         gold_domain.append((schema, t, "Retail", "Sales", "clear retail star schema"))
 
-    readme(schema, "capability", "STAR schema: metric-view generation, Genie spaces, clear FK prediction")
+    readme(schema, "capability", "STAR schema: metric-view generation, Genie Agents, clear FK prediction")
     readme(schema, "expect", "fct_sales -> 4 dims all predicted as FK (high confidence)")
     readme(schema, "expect", "SemanticLayer detects STAR; metric views use multi-dim joins; is_refund enables sign-flip measure")
 

@@ -85,7 +85,7 @@ def resolve_source_tables_from_kb(catalog: str, schema: str) -> list[str]:
     """Read distinct source table names from table_knowledge_base.
 
     Useful when TABLE_NAMES is empty and you need the original source tables
-    (e.g. for Genie space creation) rather than listing the output schema.
+    (e.g. for Genie Agent creation) rather than listing the output schema.
     """
     kb = spark.table(f"`{catalog}`.`{schema}`.table_knowledge_base")
     rows = kb.select("table_name").distinct().collect()

@@ -74,7 +74,7 @@ Use this checklist when validating a new release before merging to `main`. Copy 
 - [ ] Only deployed and queryable metric views are included in Genie context
 - [ ] SQL examples are generated and syntactically valid
 - [ ] Join specs are merged correctly from FK predictions
-- [ ] Genie space deploys to the Databricks Genie API without errors
+- [ ] Genie Agent deploys to the Databricks Genie API without errors
 - [ ] No duplicate or stale tables appear in the generated space
 
 ## 8. App UI -- Batch Jobs Tab

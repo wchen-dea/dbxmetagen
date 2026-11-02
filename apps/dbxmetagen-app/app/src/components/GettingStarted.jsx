@@ -49,7 +49,7 @@ export default function GettingStarted({ onNavigate, onStartTour }) {
     <div className="space-y-6 max-w-4xl mx-auto">
       <PageHeader
         title="Getting Started"
-        subtitle="A guide to building your semantic layer with dbxmetagen"
+        subtitle="A guide to building Discount Tire Enterprise Intelligence with dbxmetagen"
         actions={
           onStartTour && (
             <button onClick={onStartTour} className="btn-ghost btn-sm flex items-center gap-1.5">
@@ -66,9 +66,9 @@ export default function GettingStarted({ onNavigate, onStartTour }) {
       {/* Section 1: The Problem */}
       <div className="card p-6 border-l-4 border-l-dbx-lava bg-gradient-to-br from-white to-slate-50/80 dark:from-dbx-navy-650 dark:to-dbx-navy-700">
         <p className="text-sm text-slate-700 dark:text-slate-200 leading-relaxed">
-          You have hundreds of tables in Unity Catalog, but can your analysts find the ones with patient data?
-          Do they know which columns contain PII? How <code className="text-xs bg-slate-100 dark:bg-dbx-navy-500 px-1 py-0.5 rounded">dim_patient</code> connects
-          to <code className="text-xs bg-slate-100 dark:bg-dbx-navy-500 px-1 py-0.5 rounded">fact_encounter</code>?
+          You have hundreds of tables in Unity Catalog, but can your analysts find the ones with store, product, or inventory data?
+          Do they know which columns contain customer information? How <code className="text-xs bg-slate-100 dark:bg-dbx-navy-500 px-1 py-0.5 rounded">dim_product</code> connects
+          to <code className="text-xs bg-slate-100 dark:bg-dbx-navy-500 px-1 py-0.5 rounded">fact_sales</code>?
           Without context, every person who touches your data writes their own interpretation — and gets a different answer.
         </p>
         <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mt-3">
@@ -84,7 +84,7 @@ export default function GettingStarted({ onNavigate, onStartTour }) {
           <FoundationCard
             step={1}
             title="Core Metadata"
-            what="Uses AI to write descriptions for every table and column. Classifies sensitive data (PII, PHI, PCI). Tags each table with its business domain."
+            what="Uses AI to write descriptions for every table and column. Classifies sensitive data (PII, PCI). Tags each table with its retail business domain."
             why="This is the minimum useful output. After this step, anyone browsing your catalog can understand what a table contains and whether it has sensitive data — without reading the schema."
             tip="Start with 5–10 tables to evaluate cost, performance, and quality — then scale up iteratively."
             onClick={() => onNavigate('jobs')}
@@ -93,8 +93,8 @@ export default function GettingStarted({ onNavigate, onStartTour }) {
           <FoundationCard
             step={2}
             title="Advanced Metadata (Knowledge Graph)"
-            what="Maps your tables to business concepts (Patient, Account, Transaction) using industry ontologies. Discovers foreign key relationships. Computes column similarity. Builds a searchable index."
-            why="The knowledge graph answers structural questions — 'which tables represent patients?', 'how do these 50 tables connect?' — whether you use agents or just browse it directly."
+            what="Maps your tables to retail business concepts (Store, Product, Inventory, Sale) using industry ontologies. Discovers foreign key relationships. Computes column similarity. Builds a searchable index."
+            why="The knowledge graph answers structural questions — 'which tables represent products?', 'how do these 50 tables connect?' — whether you use agents or just browse it directly."
             onClick={() => onNavigate('jobs')}
             linkLabel="Generate Advanced Metadata"
           />
@@ -131,7 +131,7 @@ export default function GettingStarted({ onNavigate, onStartTour }) {
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-emerald-500 mt-0.5 shrink-0">&#10003;</span>
-                Sensitivity tags (PII, PHI, PCI)
+                Sensitivity tags (PII, PCI)
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-emerald-500 mt-0.5 shrink-0">&#10003;</span>
@@ -213,7 +213,7 @@ export default function GettingStarted({ onNavigate, onStartTour }) {
           <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">What to look for when reviewing</h3>
           <ul className="space-y-1 text-xs text-slate-500 dark:text-slate-400">
             <li><span className="font-medium text-slate-600 dark:text-slate-300">Ontology entities</span> — check confidence scores; below 0.6 means the mapping is uncertain</li>
-            <li><span className="font-medium text-slate-600 dark:text-slate-300">PI / PHI / PCI</span> — verify all classifications; false negatives have compliance implications</li>
+            <li><span className="font-medium text-slate-600 dark:text-slate-300">PII / PCI</span> — verify all classifications; false negatives have compliance implications</li>
             <li><span className="font-medium text-slate-600 dark:text-slate-300">FK predictions</span> — approve high-confidence ones, review medium, reject false positives. Do this before generating metric views, since their joins are built from approved foreign keys</li>
             <li><span className="font-medium text-slate-600 dark:text-slate-300">Comments</span> — spot-check 10-20% for accuracy, especially domain-specific tables</li>
           </ul>
@@ -250,18 +250,18 @@ export default function GettingStarted({ onNavigate, onStartTour }) {
         <h2 className="heading-section mb-1">Use Your Metadata</h2>
         <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
           The outputs are standard Delta tables and Vector Search indexes — consumable from any tool, not just this app.
-          Genie spaces and the agent are built-in use cases, but you can also query the knowledge graph directly from notebooks, dashboards, or your own applications.
+          Genie Agents and the agent are built-in use cases, but you can also query the knowledge graph directly from notebooks, dashboards, or your own applications.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <OutcomeCard
             title="Explore Your Data"
-            description="Browse the knowledge graph to see how tables relate, which business entities they map to, and where sensitive data lives. Navigate by entity ('show me all Patient tables') instead of hunting through schema names."
+            description="Browse the knowledge graph to see how tables relate, which business entities they map to, and where sensitive data lives. Navigate by entity ('show me all Product tables') instead of hunting through schema names."
             onClick={() => onNavigate('entities')}
             linkLabel="Open Entity Browser"
           />
           <OutcomeCard
             title="Ask Questions"
-            description="Chat with a metadata-aware agent. Ask 'what tables contain patient demographics?' or 'how does the claims schema connect to encounters?' The agent uses the knowledge graph and vector index to find answers. See the agent breakdown below for details."
+            description="Chat with a metadata-aware agent. Ask 'what tables contain product and inventory data?' or 'how does the sales schema connect to stores?' The agent uses the knowledge graph and vector index to find answers. See the agent breakdown below for details."
             onClick={() => onNavigate('agent')}
             linkLabel="Open Agent"
           />
@@ -272,10 +272,10 @@ export default function GettingStarted({ onNavigate, onStartTour }) {
             linkLabel="Define Metric Views"
           />
           <OutcomeCard
-            title="Build a Genie Space"
-            description="Assemble a natural-language SQL interface so end users can ask business questions in plain English. Genie uses your descriptions, relationships, and metric views to write accurate SQL."
+            title="Build a Genie Agent"
+            description="Assemble a natural-language SQL agent so end users can ask business questions in plain English. Genie uses your descriptions, relationships, and metric views to write accurate SQL."
             onClick={() => onNavigate('genie')}
-            linkLabel="Build Genie Space"
+            linkLabel="Build Genie Agent"
           />
           <OutcomeCard
             title="Query Directly"
@@ -323,7 +323,7 @@ export default function GettingStarted({ onNavigate, onStartTour }) {
                 <span className="text-[10px] font-medium text-orange-600 dark:text-orange-400 bg-orange-100 dark:bg-orange-900/40 px-1.5 py-0.5 rounded">Under Development</span>
               </div>
               <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
-                Audits PII/PHI/PCI classification coverage, finds gaps in masking, traces sensitive data lineage, and identifies re-identification risk paths through entity relationships.
+                Audits PII/PCI classification coverage, finds gaps in masking, traces sensitive data lineage, and identifies re-identification risk paths through entity relationships.
               </p>
             </div>
             <div className="p-3 rounded-lg border border-rose-200 dark:border-rose-800/40 bg-rose-50/30 dark:bg-rose-900/10">

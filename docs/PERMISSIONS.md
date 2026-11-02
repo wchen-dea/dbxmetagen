@@ -134,7 +134,7 @@ The app declares `user_api_scopes` on EVERY deploy (default in `app_variables.ym
 | `bundle deploy` / `deploy.sh` | `files.files`, `serving.serving-endpoints`, `sql.statement-execution`, `dashboards.genie` |
 | Notebook deploy (NB02) | `files.files`, `serving.serving-endpoints`, `sql.statement-execution`, `dashboards.genie` |
 
-`files.files` (UC volumes), `sql.statement-execution` (SQL), and `dashboards.genie` (Genie space create/update) are the three the app actively uses under the user token. `serving.serving-endpoints` is declared for parity/future OBO serving calls (not exercised by the app today) — drop it from the `user_api_scopes` override for a minimal consent surface.
+`files.files` (UC volumes), `sql.statement-execution` (SQL), and `dashboards.genie` (Genie Agent create/update) are the three the app actively uses under the user token. `serving.serving-endpoints` is declared for parity/future OBO serving calls (not exercised by the app today) — drop it from the `user_api_scopes` override for a minimal consent surface.
 
 ---
 

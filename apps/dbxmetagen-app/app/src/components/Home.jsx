@@ -47,7 +47,7 @@ function DoorCard({ accent, eyebrow, title, description, bullets, cta, onClick }
 const SECONDARY = [
   { id: 'metadata', label: 'Review & apply', desc: 'Edit and apply generated metadata' },
   { id: 'agent', label: 'Explore / Agent', desc: 'Ask questions, browse the graph' },
-  { id: 'genie', label: 'Build Genie space', desc: 'Natural-language SQL over your data' },
+  { id: 'genie', label: 'Build Genie Agent', desc: 'Natural-language SQL over your data' },
 ]
 
 // Mirror of App.jsx SIMPLIFIED_TABS: destinations that still exist in simplified view.
@@ -66,14 +66,14 @@ export default function Home({ onNavigate }) {
         <div className="relative max-w-3xl">
           <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-dbx-amber-light mb-3">
             <span className="h-2 w-2 rounded-full bg-dbx-amber" />
-            Discount Tire data intelligence
+            Discount Tire Enterprise Intelligence
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Turn SBS data assets into retail intelligence.</h2>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Turn DT data assets into retail intelligence.</h2>
           <p className="text-sm md:text-base text-dbx-oat/80 mt-3 leading-relaxed max-w-2xl">
-            dbxmetagen is the metadata and semantic foundation for Discount Tire's retail data — making store, product, inventory, customer, and service data easier to trust, discover, and use.
+            Transform Discount Tire's data into trusted, governed, AI-ready intelligence — connecting store, product, inventory, customer, and service data so every team can move from questions to confident decisions faster.
           </p>
           <div className="mt-6 flex flex-wrap items-center gap-2 text-xs text-dbx-oat/80">
-            <span className="rounded-full bg-white/10 border border-white/15 px-3 py-1.5">SBS Data Platform</span>
+            <span className="rounded-full bg-white/10 border border-white/15 px-3 py-1.5">DT Data Platform</span>
             <span className="text-dbx-amber">→</span>
             <span className="rounded-full bg-white/10 border border-white/15 px-3 py-1.5">Governed metadata</span>
             <span className="text-dbx-amber">→</span>
@@ -85,7 +85,7 @@ export default function Home({ onNavigate }) {
       <div className="mb-7">
         <h2 className="text-2xl font-bold text-slate-800 dark:text-white">Choose a data outcome</h2>
         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1.5">
-          Start with SBS source assets and build trusted context for every retail decision.
+          Start with DT source assets and build trusted context for every retail decision.
         </p>
       </div>
 
@@ -93,7 +93,7 @@ export default function Home({ onNavigate }) {
         <DoorCard
           accent="#D97706"
           eyebrow="Foundation layer"
-          title="Document SBS source assets"
+          title="Document DT source assets"
           description="Create trusted business context for Discount Tire's retail tables before they power reporting, AI, or downstream products."
           bullets={[
             'Store, product, inventory & service definitions',
@@ -111,7 +111,7 @@ export default function Home({ onNavigate }) {
             accent="#0E7490"
             eyebrow="Decision layer"
             title="Build retail semantic intelligence"
-            description="Turn governed SBS metadata into a connected semantic layer for merchandising, inventory, store operations, and customer experience."
+            description="Turn governed DT metadata into a connected semantic layer for merchandising, inventory, store operations, and customer experience."
             bullets={[
               'Metric views for sales, inventory & service KPIs',
               'Vector index for natural-language discovery',
@@ -126,7 +126,7 @@ export default function Home({ onNavigate }) {
 
       <div className="mt-8 border-t border-slate-200 dark:border-dbx-navy-400/30 pt-5">
         <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3">
-          Continue exploring the SBS data platform
+          Continue exploring the DT data platform
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
           {secondary.map(s => (

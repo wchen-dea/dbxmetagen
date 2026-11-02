@@ -225,7 +225,7 @@ export default function GenieBuilder({ onNavigate, pipelineStats }) {
   }
 
   const createSpace = async () => {
-    if (!title.trim()) return setCreateError('Enter a title for the Genie space')
+    if (!title.trim()) return setCreateError('Enter a title for the Genie Agent')
     setCreateError(null); setCreating(true)
     let parsed
     try { parsed = JSON.parse(editedJson) } catch { setCreating(false); return setCreateError('Invalid JSON') }
@@ -259,7 +259,7 @@ export default function GenieBuilder({ onNavigate, pipelineStats }) {
       setCreatedSpace(created)
       if (created.space_id) loadTrackedSpaces()
     } catch (e) {
-      setCreateError(e.message || 'Network error creating Genie space')
+      setCreateError(e.message || 'Network error creating Genie Agent')
     }
     setCreating(false)
   }
@@ -342,26 +342,26 @@ export default function GenieBuilder({ onNavigate, pipelineStats }) {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Genie Space Builder" subtitle="Create a Databricks Genie space from your tables, metric views, and business questions" />
+      <PageHeader title="Genie Agent Builder" subtitle="Create a Databricks Genie Agent from your tables, metric views, and business questions" />
 
       <ErrorBanner error={error} />
       <PrereqBanner
         show={pipelineStats && pipelineStats.with_comments === 0}
-        message="Genie spaces work best with described tables. Generate metadata first so the AI can build accurate join specs and instructions."
+        message="Genie Agents work best with described tables. Generate metadata first so the AI can build accurate join specs and instructions."
         actionLabel="Go to Generate Metadata"
         onAction={() => onNavigate?.('jobs')}
       />
 
       {/* Step-by-step workflow guide */}
       <div className="card p-4 text-xs text-slate-600 dark:text-slate-300 leading-relaxed space-y-1">
-        <p className="font-semibold text-sm text-slate-700 dark:text-slate-200">How to build a Genie space</p>
+        <p className="font-semibold text-sm text-slate-700 dark:text-slate-200">How to build a Genie Agent</p>
         <ol className="list-decimal list-inside space-y-0.5 text-slate-500 dark:text-slate-400">
           <li><strong>Create metric views first</strong> (recommended) &mdash; go to the <em>Semantic Layer</em> tab, generate and validate metric views for your tables. Applied metric views become Genie data sources; validated (unapplied) ones contribute SQL snippets. Metric views give Genie pre-built measures and dimensions, improving answer quality.</li>
-          <li><strong>Select tables</strong> below. Expand each schema to pick tables and any applied metric views. When tables are selected, the AI generates joins, expressions, and SQL snippets. When only metric views are selected, the space is built from existing MV definitions without additional expression generation.</li>
+          <li><strong>Select tables</strong> below. Expand each schema to pick tables and any applied metric views. When tables are selected, the AI generates joins, expressions, and SQL snippets. When only metric views are selected, the agent is built from existing MV definitions without additional expression generation.</li>
           <li><strong>Add context</strong> (optional) &mdash; describe your business and key terminology to improve the AI output.</li>
           <li><strong>Add questions</strong> (optional) &mdash; write sample questions or click Suggest to auto-generate them from your tables.</li>
-          <li>Click <strong>Generate Genie Config</strong> &mdash; AI builds the space configuration. Most builds take one to three minutes.</li>
-          <li>Review the <strong>Config Preview</strong>, optionally refine, then enter a title and click <strong>Create Genie Space</strong> to deploy it.</li>
+          <li>Click <strong>Generate Genie Config</strong> — AI builds the agent configuration. Most builds take one to three minutes.</li>
+          <li>Review the <strong>Config Preview</strong>, optionally refine, then enter a title and click <strong>Create Genie Agent</strong> to deploy it.</li>
         </ol>
       </div>
 
@@ -584,7 +584,7 @@ export default function GenieBuilder({ onNavigate, pipelineStats }) {
       {selectedTables.length > 0 && selectedMVs.size > 0 && (
         <div className="bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800/60 rounded-lg px-4 py-3 text-sm text-amber-800 dark:text-amber-200">
           <strong>Recommendation:</strong> avoid combining tables and metric views in
-          the same Genie space. Genie currently cannot join a metric view to a table
+          the same Genie Agent. Genie currently cannot join a metric view to a table
           (or to another metric view), so questions spanning both won't resolve.
           For best results, build one space from metric views <em>or</em> from tables &mdash;
           not both.
@@ -771,31 +771,31 @@ export default function GenieBuilder({ onNavigate, pipelineStats }) {
 
           <div className="flex items-end gap-3">
             <div className="flex-1">
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Genie Space Title <span className="font-normal text-xs text-slate-400">&mdash; review the config above, then name and create your space</span></label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Genie Agent Title <span className="font-normal text-xs text-slate-400">&mdash; review the config above, then name and create your space</span></label>
               <input
                 type="text"
                 value={title}
                 onChange={e => setTitle(e.target.value)}
                 placeholder="My Analytics Space"
-                title="Name for the Genie space (used as display name in Databricks)"
+                title="Name for the Genie Agent (used as display name in Databricks)"
                 className="w-full border border-slate-200 dark:border-slate-600 rounded-md px-3 py-2 text-sm bg-dbx-oat-light dark:bg-slate-700 text-slate-800 dark:text-slate-200"
               />
             </div>
             <button
               onClick={createSpace}
               disabled={!title.trim() || creating}
-              title="Create a Databricks Genie space from the selected tables with AI-generated instructions and example queries"
+              title="Create a Databricks Genie Agent from the selected tables with AI-generated instructions and example queries"
               className="px-5 py-2.5 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 disabled:opacity-50 transition-colors flex items-center gap-1.5"
             >
               {creating && <span className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />}
-              {creating ? 'Creating...' : 'Create Genie Space'}
+              {creating ? 'Creating...' : 'Create Genie Agent'}
             </button>
           </div>
 
           {createError && (
             <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-lg px-4 py-3 text-sm space-y-1">
               <p className="font-medium text-red-700 dark:text-red-300">
-                {createError.includes('Data source validation failed') ? 'Some data sources could not be found' : 'Failed to create Genie space'}
+                {createError.includes('Data source validation failed') ? 'Some data sources could not be found' : 'Failed to create Genie Agent'}
               </p>
               {createError.includes('Data source validation failed') ? (
                 <div className="text-xs text-red-600 dark:text-red-400 space-y-1">
@@ -817,7 +817,7 @@ export default function GenieBuilder({ onNavigate, pipelineStats }) {
 
           {createdSpace && (
             <div className="bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-700 rounded-lg px-4 py-3 text-sm text-emerald-700 dark:text-emerald-300">
-              Genie space {createdSpace.updated ? 'updated' : 'created'}! ID: <span className="font-mono">{createdSpace.space_id}</span>
+              Genie Agent {createdSpace.updated ? 'updated' : 'created'}! ID: <span className="font-mono">{createdSpace.space_id}</span>
               {(createdSpace.table_count != null || createdSpace.join_count != null) && (
                 <span className="ml-2 text-xs opacity-80">
                   ({createdSpace.table_count ?? '?'} tables{createdSpace.mv_count ? `, ${createdSpace.mv_count} MVs` : ''}, {createdSpace.join_count ?? '?'} explicit join_specs deployed)
@@ -838,7 +838,7 @@ export default function GenieBuilder({ onNavigate, pipelineStats }) {
       {/* Tracked Spaces */}
       {trackedSpaces.length > 0 && (
         <div className="card p-6 mt-6">
-          <h2 className="heading-section mb-4">My Genie Spaces</h2>
+          <h2 className="heading-section mb-4">My Genie Agents</h2>
           <div className="overflow-x-auto">
             <table className="min-w-full text-sm">
               <thead><tr>
@@ -866,7 +866,7 @@ export default function GenieBuilder({ onNavigate, pipelineStats }) {
                       <button onClick={() => setEditingSpaceId(s.space_id)}
                         className="text-xs text-blue-600 hover:text-blue-800 hover:underline">Edit</button>
                       <button onClick={async () => {
-                        if (!confirm(`Delete Genie space "${s.title}"?`)) return
+                        if (!confirm(`Delete Genie Agent "${s.title}"?`)) return
                         try {
                           const res = await fetch(`/api/genie/spaces/${s.space_id}`, { method: 'DELETE' })
                           if (!res.ok) { const d = await res.json().catch(() => ({})); setError(d.detail || 'Delete failed'); return }
@@ -887,7 +887,7 @@ export default function GenieBuilder({ onNavigate, pipelineStats }) {
         <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Edit Existing Space by ID</h3>
         <div className="flex gap-2">
           <input value={loadByIdValue} onChange={e => setLoadByIdValue(e.target.value)}
-            placeholder="Paste a Genie Space ID..."
+            placeholder="Paste a Genie Agent ID..."
             className="flex-1 border border-slate-200 dark:border-slate-600 rounded-md px-3 py-2 text-sm bg-dbx-oat-light dark:bg-slate-700 text-slate-800 dark:text-slate-200" />
           <button onClick={() => { if (loadByIdValue.trim()) setEditingSpaceId(loadByIdValue.trim()) }}
             disabled={!loadByIdValue.trim()}

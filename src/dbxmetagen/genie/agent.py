@@ -1,4 +1,4 @@
-"""Sectional Genie space configuration generator.
+"""Sectional Genie Agent configuration generator.
 
 Phase 1 (Core): LLM generates description, text_instructions, sample_questions, join_specs.
 Phase 2 (SQL):  LLM generates example_sql pairs.
@@ -78,7 +78,7 @@ _PHASE1_PROMPT = _CONTEXT_BLOCK + """
 Output a JSON object wrapped in ```json ``` fences with these fields ONLY:
 
 {{
-  "description": "<1-2 sentence description of what this Genie space helps users explore>",
+  "description": "<1-2 sentence description of what this Genie Agent helps users explore>",
   "instructions": {{
     "text": "<1-2 sentence intro summarizing the data domain and analytical focus, followed by concise markdown sections for column disambiguation, business rules, and date handling>"
   }},

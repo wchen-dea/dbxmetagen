@@ -1,4 +1,4 @@
-"""Read curated example SQL + benchmarks from existing Genie spaces.
+"""Read curated example SQL + benchmarks from existing Genie Agents.
 
 Backlog items 14/15. Runs INSIDE the Databricks App (Spark-free): the REST reads
 here + the app's Statement Execution API writes to the CDF-enabled
@@ -107,7 +107,7 @@ def _coerce_text(value: Any) -> str:
 
 
 class GenieSQLPuller:
-    """Read curated example SQL + benchmarks from existing Genie spaces via REST.
+    """Read curated example SQL + benchmarks from existing Genie Agents via REST.
 
     Spark-free: all reads go through the Databricks SDK REST client, so this runs
     inside the Databricks App (no cluster). Persistence to the CDF-enabled
@@ -123,7 +123,7 @@ class GenieSQLPuller:
     # -- Genie REST reads -----------------------------------------------------
 
     def list_spaces(self) -> List[Dict[str, Any]]:
-        """List all Genie spaces, following pagination."""
+        """List all Genie Agents, following pagination."""
         out: List[Dict[str, Any]] = []
         token: Optional[str] = None
         while True:

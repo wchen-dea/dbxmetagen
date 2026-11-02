@@ -75,7 +75,7 @@ const MORE_NAV = {
   category: 'More',
   items: [
     { id: 'agent', label: 'Explore / Agent', desc: 'Chat, graph explorer, and semantic search' },
-    { id: 'genie', label: 'Build Genie Space', desc: 'Build natural-language SQL spaces' },
+    { id: 'genie', label: 'Build Genie Agent', desc: 'Build natural-language SQL agents' },
     { id: 'entities', label: 'Entity Browser', desc: 'Entity-first navigation with conformance view' },
     { id: 'ontologyBuilder', label: 'Build Ontology', desc: 'Visual entity, relationship, and property editor' },
     { id: 'syncops', label: 'Sync & Ops', desc: 'Rebuild graph/index, sync to Lakebase, set up MCP' },
@@ -248,8 +248,21 @@ const SIMPLIFIED_TABS = new Set(['home', 'jobs', 'metadata', 'guide', 'context']
 // natural home for future app-level settings.
 function SettingsMenu({ simplified, onChange }) {
   const [open, setOpen] = useState(false)
+  const menuRef = useRef(null)
+
+  useEffect(() => {
+    if (!open) return undefined
+
+    const handleOutsidePointerDown = (event) => {
+      if (!menuRef.current?.contains(event.target)) setOpen(false)
+    }
+
+    document.addEventListener('pointerdown', handleOutsidePointerDown)
+    return () => document.removeEventListener('pointerdown', handleOutsidePointerDown)
+  }, [open])
+
   return (
-    <div className="relative">
+    <div ref={menuRef} className="relative">
       <button onClick={() => setOpen(o => !o)}
         className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/10 backdrop-blur-sm border border-white/10 text-dbx-oat/80 hover:text-white hover:bg-white/20 transition-all"
         title="Settings" aria-label="Settings" aria-expanded={open}>
@@ -441,16 +454,16 @@ export default function App() {
             className="flex items-center gap-3 text-left transition-opacity hover:opacity-80"
             title="Home" aria-label="Go to home">
             <div className="relative">
-              <img src="/logo.png" alt="Discount Tire data intelligence" className="h-9 w-9" />
+              <img src="/logo.png" alt="Discount Tire Enterprise Intelligence" className="h-9 w-9" />
               <div className="absolute -bottom-0.5 left-0 right-0 h-0.5 bg-dbx-amber rounded-full" />
             </div>
             <div>
               <h1 className="text-xl font-bold text-white tracking-tight">
-                Discount Tire <span className="text-dbx-amber font-semibold">Data Intelligence</span>
+                Discount Tire <span className="text-dbx-amber font-semibold">Enterprise Intelligence</span>
                 {appMeta.displayName && <><span className="text-dbx-oat/50 font-normal mx-1.5">:</span><span className="text-dbx-amber font-semibold">{appMeta.displayName}</span></>}
                 {appMeta.version && <span className="ml-2 text-xs font-normal text-dbx-oat/40">v{appMeta.version}</span>}
               </h1>
-              <p className="text-dbx-oat/60 text-xs mt-0.5">SBS Data Platform source assets powered by dbxmetagen</p>
+              <p className="text-dbx-oat/60 text-xs mt-0.5">DT Data Platform AI Assets Powered by dbxmetagen</p>
             </div>
           </button>
           <div className="flex items-center gap-1.5">

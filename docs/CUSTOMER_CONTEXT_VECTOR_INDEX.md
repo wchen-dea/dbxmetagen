@@ -82,7 +82,7 @@ without coupling to the generation pipeline.
    organization's own authored context (definitions, caveats, SME notes), not just generated
    metadata. Point a retriever tool at `customer_context_vs_index` alongside `metadata_vs_index`.
 
-3. **Genie space building (`src/dbxmetagen/genie/`).** Genie context assembly can pull the
+3. **Genie Agent building (`src/dbxmetagen/genie/`).** Genie context assembly can pull the
    top semantically-relevant context entries for the tables in a space and fold them into the
    space's instructions / descriptions, so the Genie room inherits the same business language the
    stewards wrote — improving NL-to-SQL grounding.

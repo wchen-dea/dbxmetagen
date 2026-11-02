@@ -241,7 +241,7 @@ class SampleQuestion(BaseModel):
 
 
 class GenieConfig(BaseModel):
-    """Genie space configuration (currently just sample questions)."""
+    """Genie Agent configuration (currently just sample questions)."""
     sample_questions: list[SampleQuestion] = []
 
 

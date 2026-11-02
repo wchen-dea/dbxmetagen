@@ -20,14 +20,14 @@ table_knowledge_base / column_knowledge_base  (internal source of truth)
     +---> Vector Index (metadata_documents)
     +---> Community Summaries
     +---> Semantic Layer (metric view generation)
-    +---> Genie Spaces (context assembly)
+    +---> Genie Agents (context assembly)
     +---> Deep Analysis Agent (via vector search)
 
 Optional (parallel, independent):
     LLM generation --[apply_ddl=true]--> Unity Catalog (COMMENT ON / SET TAGS)
 ```
 
-Key point: **all downstream consumers read from the knowledge base tables, not from Unity Catalog**. Whether or not DDL is applied to UC has no effect on the vector index, Genie spaces, semantic layer, or the knowledge graph. UC application is an optional step for publishing metadata externally.
+Key point: **all downstream consumers read from the knowledge base tables, not from Unity Catalog**. Whether or not DDL is applied to UC has no effect on the vector index, Genie Agents, semantic layer, or the knowledge graph. UC application is an optional step for publishing metadata externally.
 
 ## Operational Modes
 

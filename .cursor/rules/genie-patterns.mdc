@@ -1,5 +1,5 @@
 ---
-description: Genie space generation pipeline invariants and patterns
+description: Genie Agent generation pipeline invariants and patterns
 globs:
   - "**/genie/**/*.py"
 ---

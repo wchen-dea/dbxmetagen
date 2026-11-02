@@ -1,4 +1,4 @@
-"""Deterministic context assembly for Genie space generation.
+"""Deterministic context assembly for Genie Agent generation.
 
 Gathers all pre-computed metadata from knowledge bases, FK predictions,
 ontology entities, and metric view definitions, then packages it into
@@ -167,7 +167,7 @@ def _translate_mv_aliases(expr: str, source_short: str, joins: list) -> str:
 
 
 class GenieContextAssembler:
-    """Gathers metadata from KB/FK/ontology tables and pre-builds deterministic Genie space sections.
+    """Gathers metadata from KB/FK/ontology tables and pre-builds deterministic Genie Agent sections.
 
     Queries the SQL warehouse to collect table/column KB comments, FK predictions,
     ontology entities, metric view definitions, and column profiling stats.
@@ -353,7 +353,7 @@ class GenieContextAssembler:
             sql_snippets = self._build_sql_snippets(
                 snippet_mvs, value_samples, column_meta
             )
-        # Cap snippets to avoid overwhelming Genie space definition
+        # Cap snippets to avoid overwhelming Genie Agent definition
         _SNIPPET_CAPS = {"measures": 25, "filters": 15, "expressions": 20}
         for key, cap in _SNIPPET_CAPS.items():
             if len(sql_snippets.get(key, [])) > cap:
@@ -1469,7 +1469,7 @@ class GenieContextAssembler:
 
 
 # ---------------------------------------------------------------------------
-# Section-scoped AI assist for the Genie Space Updater
+# Section-scoped AI assist for the Genie Agent Updater
 # ---------------------------------------------------------------------------
 
 _SECTION_PROMPTS = {
@@ -1527,7 +1527,7 @@ def generate_section_assist(
     user_prompt: str = "",
     model_endpoint: str | None = None,
 ) -> dict:
-    """Generate or augment a single Genie space section (e.g. joins, filters, example_sql) via LLM.
+    """Generate or augment a single Genie Agent section (e.g. joins, filters, example_sql) via LLM.
 
     Runs ``GenieContextAssembler.assemble`` to gather table/column context, builds
     a section-specific prompt from ``_SECTION_PROMPTS``, calls ``ChatDatabricks``,
@@ -1552,7 +1552,7 @@ def generate_section_assist(
     user_extra = f"\n\nUser request: {user_prompt}" if user_prompt else ""
 
     system = (
-        f"You are a Genie Space configuration expert. Generate ONLY the requested section.\n\n"
+        f"You are a Genie Agent configuration expert. Generate ONLY the requested section.\n\n"
         f"=== METADATA CONTEXT ===\n{ctx['context_text'][:8000]}\n\n"
         f"=== TASK ===\n{section_prompt}{existing_text}{user_extra}\n\n"
         f"Output ONLY valid JSON wrapped in ```json ``` fences. No explanation."

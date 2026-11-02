@@ -3,12 +3,12 @@
 
 Purpose: before building the "pull Genie serialization" feature (backlog items
 14/15), we must know whether example SQL + benchmarks / curated questions from an
-EXISTING Genie space are available in a machine-readable form. The typed SDK
+EXISTING Genie Agent are available in a machine-readable form. The typed SDK
 `GenieSpace` only exposes space_id/title/description/warehouse_id — so the useful
 content, IF it exists, must come from a lower-level REST endpoint. This script
 finds out, without writing anything.
 
-Run against a workspace that HAS at least one real Genie space with example SQL
+Run against a workspace that HAS at least one real Genie Agent with example SQL
 and/or benchmark questions configured:
 
     # uses your current Databricks CLI profile / env auth

@@ -84,8 +84,8 @@ The supported dashboard provides the following capabilities:
   semantic, lexical, similarity, and relationship-aware retrieval.
 - **Semantic layer:** generate and validate metric views, measures, dimensions, joins,
   filtered measures, and window calculations, including SQL autofix where supported.
-- **Genie enablement:** create Genie space context and reuse curated SQL from existing
-  Genie spaces when seeding new metric-view definitions.
+- **Genie enablement:** create Genie Agent context and reuse curated SQL from existing
+  Genie Agents when seeding new metric-view definitions.
 - **Natural-language agents:** use analyst, governance, impact, graph, metadata, and
   metric-view agents to explore the catalog and its relationships conversationally.
 - **Human review:** keep generated changes reviewable and separate from production metadata;
@@ -132,7 +132,7 @@ setup instructions in that directory and deploy it independently; do not expect
 
 ## dbxmetagen-app (primary)
 
-The main application for this repository. Provides a full-featured UI for metadata generation, domain/ontology classification, PII detection, knowledge graph analytics, semantic layer management, Genie space building, and agent-based metadata exploration. Deployed and managed via Databricks Asset Bundles (`databricks bundle deploy` + `scripts/grant_app_permissions.sh`) -- see the root `databricks.yml` and `resources/` for configuration.
+The main application for this repository. Provides a full-featured UI for metadata generation, domain/ontology classification, PII detection, knowledge graph analytics, semantic layer management, Genie Agent building, and agent-based metadata exploration. Deployed and managed via Databricks Asset Bundles (`databricks bundle deploy` + `scripts/grant_app_permissions.sh`) -- see the root `databricks.yml` and `resources/` for configuration.
 
 See [dbxmetagen-app/](dbxmetagen-app/) for details.
 

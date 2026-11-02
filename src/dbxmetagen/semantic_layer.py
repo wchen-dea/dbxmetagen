@@ -274,7 +274,7 @@ class SemanticLayerConfig:
     max_join_hops: int = 2
     materialize_metric_views: bool = False
     materialization_schedule: str = "every 6 hours"
-    # Item 15: seed generation with curated example SQL pulled from Genie spaces
+    # Item 15: seed generation with curated example SQL pulled from Genie Agents
     # (built by genie_sql_puller into genie_examples_vs_index). When enabled and
     # the index exists, build_context retrieves exemplars matching the tables in
     # scope and injects them as "proven query patterns" few-shot context.
@@ -922,7 +922,7 @@ class SemanticLayerGenerator:
         format them as few-shot 'proven query patterns' context.
 
         Returns "" when disabled, the index is missing, or nothing is retrieved.
-        The exemplars are real, human-curated SQL from existing Genie spaces, so
+        The exemplars are real, human-curated SQL from existing Genie Agents, so
         they anchor generation to measures/dimensions/joins that are known to
         work against similar data (the "replace a mart layer" use case)."""
         if not self.config.use_genie_sql_examples or not table_names_list:
@@ -952,7 +952,7 @@ class SemanticLayerGenerator:
         if not examples:
             return ""
         lines = [
-            "\nPROVEN QUERY PATTERNS (curated example SQL from existing Genie spaces "
+            "\nPROVEN QUERY PATTERNS (curated example SQL from existing Genie Agents "
             "on similar data -- use these as REFERENCE for which measures, dimensions, "
             "grains, and joins are known to work; adapt them into metric-view measures/"
             "dimensions. Do NOT copy table/column names that are not in the metadata above):"
@@ -1912,11 +1912,11 @@ OUTPUT (one JSON object only, no array, no explanation):"""
 
 
     # ------------------------------------------------------------------
-    # Genie space creation
+    # Genie Agent creation
     # ------------------------------------------------------------------
 
     def _build_genie_instructions(self, applied: list, fk_rows: list, tables_meta: list, entity_map: dict) -> dict:
-        """Build rich Genie space instructions from available metadata."""
+        """Build rich Genie Agent instructions from available metadata."""
         # text_instructions: schema context
         text_instructions = []
         domains = set()
@@ -2006,7 +2006,7 @@ OUTPUT (one JSON object only, no array, no explanation):"""
         return examples
 
     def create_genie_space(self, display_name: str, warehouse_id: str) -> Optional[str]:
-        """Build a Genie space from applied metric views and deploy via the REST API.
+        """Build a Genie Agent from applied metric views and deploy via the REST API.
 
         This is the **notebook/job path** -- a simplified builder that reads
         applied MVs, KB, FK predictions, and ontology entities directly via
@@ -2030,7 +2030,7 @@ OUTPUT (one JSON object only, no array, no explanation):"""
             ).collect()
         ]
         if not applied:
-            logger.warning("No applied metric views -- skipping Genie space creation")
+            logger.warning("No applied metric views -- skipping Genie Agent creation")
             return None
 
         questions = [
@@ -2140,11 +2140,11 @@ OUTPUT (one JSON object only, no array, no explanation):"""
             }
             resp = w.api_client.do("POST", "/api/2.0/genie/spaces", body=payload)
             space_id = resp.get("space_id", resp.get("id", ""))
-            logger.info("Created Genie space %s (%s)", display_name, space_id)
+            logger.info("Created Genie Agent %s (%s)", display_name, space_id)
 
             # UPDATE: All definitions-table rows with status='applied' receive the same genie_space_id returned
             # by the Genie REST API (no per-definition WHERE clause).
-            # WHY: After creating one composite Genie space for the batch, every successfully deployed metric view row
+            # WHY: After creating one composite Genie Agent for the batch, every successfully deployed metric view row
             # must point consumers to that space id for navigation and API follow-up.
             # TRADEOFFS: Simple broadcast update vs per-definition mapping (cannot represent multiple spaces in one table
             # without extra columns); any stale 'applied' rows from prior runs get relabeled to the newest space_id.
@@ -2158,7 +2158,7 @@ OUTPUT (one JSON object only, no array, no explanation):"""
             return space_id
         except Exception as e:
             logger.error(
-                "Genie space creation failed (API may not be available): %s", e
+                "Genie Agent creation failed (API may not be available): %s", e
             )
             return None
 

@@ -12853,7 +12853,7 @@ def _mv_names_from_serialized_space(ss: dict) -> list[str]:
 
 
 def _genie_content_counts(ss: dict) -> dict:
-    """Count the droppable content categories in a serialized Genie space.
+    """Count the droppable content categories in a serialized Genie Agent.
 
     Used to compare what was SENT vs what the Genie API actually persisted (read-back),
     so the UI can report joins / example-SQL / snippets that were silently dropped.
@@ -12872,7 +12872,7 @@ def _genie_content_counts(ss: dict) -> dict:
 
 @app.post("/api/genie/create")
 def genie_create(req: GenieCreateRequest):
-    """Create or update a Genie space via the Databricks REST API."""
+    """Create or update a Genie Agent via the Databricks REST API."""
     # Capture prebuilt join identifier-pairs before Pydantic strips _prebuilt
     _raw_joins = (req.serialized_space.get("instructions", {}).get("join_specs")
                   or req.serialized_space.get("join_specs") or [])
@@ -13010,9 +13010,9 @@ def genie_create(req: GenieCreateRequest):
                         f"'{config_str}', 1, 'active', NULL, current_timestamp(), current_timestamp(), NULL)",
                         timeout=30,
                     )
-                logger.info("Tracked genie space %s in genie_spaces table", space_id)
+                logger.info("Tracked Genie Agent %s in genie_spaces table", space_id)
             except Exception as track_err:
-                logger.warning("Failed to track genie space: %s", track_err)
+                logger.warning("Failed to track Genie Agent: %s", track_err)
             final_joins = transformed.get("instructions", {}).get("join_specs", [])
             final_tables = len(transformed.get("data_sources", {}).get("tables", []))
             final_mvs = len(transformed.get("data_sources", {}).get("metric_views", []))
@@ -13132,19 +13132,19 @@ def genie_create(req: GenieCreateRequest):
                 break
             break
     logger.error("Genie create/update failed: %s", last_err)
-    detail = f"Failed to create/update Genie space: {last_err}"
+    detail = f"Failed to create/update Genie Agent: {last_err}"
     if deploy_warnings:
         detail += f" (warnings: {'; '.join(deploy_warnings)})"
     raise HTTPException(500, detail=detail)
 
 
 # ---------------------------------------------------------------------------
-# Genie Space updater AI assist
+# Genie Agent updater AI assist
 # ---------------------------------------------------------------------------
 
 @app.post("/api/genie/update-assist")
 def genie_update_assist(req: GenieUpdateAssistRequest):
-    """AI-assisted generation of a single section of a Genie space definition."""
+    """AI-assisted generation of a single section of a Genie Agent definition."""
     valid_sections = {"joins", "instructions", "questions", "measures", "filters", "expressions", "example_sql", "synonyms"}
     if req.section not in valid_sections:
         raise HTTPException(400, detail=f"Invalid section '{req.section}'. Must be one of: {', '.join(sorted(valid_sections))}")
@@ -13210,7 +13210,7 @@ def genie_enrich_description(req: GenieEnrichDescriptionRequest):
     llm = ChatDatabricks(endpoint=model, temperature=0.1, max_tokens=2048, max_retries=1, request_timeout=60)
     messages = [
         {"role": "system", "content": (
-            "You write concise, Genie-optimized table descriptions for Databricks Genie Spaces. "
+            "You write concise, Genie-optimized table descriptions for Databricks Genie Agents. "
             "A good description helps Genie understand what the table contains, its business purpose, "
             "and key columns so it can generate accurate SQL. Keep it under 3 sentences."
         )},
@@ -13404,7 +13404,7 @@ def metadata_uc_current(body: UcCurrentBody):
 
 
 # ---------------------------------------------------------------------------
-# Genie Space editor: validation, health check, analysis, versions, live sync
+# Genie Agent editor: validation, health check, analysis, versions, live sync
 # ---------------------------------------------------------------------------
 
 
@@ -13711,7 +13711,7 @@ def _reclassify_metric_views(ss: dict, warehouse_id: Optional[str] = None) -> di
 
 @app.post("/api/genie/health-check")
 def genie_health_check(req: GenieHealthCheckRequest):
-    """Compute a health score for a Genie space definition."""
+    """Compute a health score for a Genie Agent definition."""
     ss = _reclassify_metric_views(req.serialized_space)
     return _compute_health_score(ss)
 
@@ -13729,7 +13729,7 @@ def _looks_like_doc_table(identifier: str, desc: str | list | None = None) -> bo
 
 @app.post("/api/genie/analyze")
 def genie_analyze(req: GenieAnalyzeRequest):
-    """Holistic AI analysis: identify gaps across all sections of a Genie space."""
+    """Holistic AI analysis: identify gaps across all sections of a Genie Agent."""
     # Re-bucket metric views that Genie round-tripped into data_sources.tables so the whole
     # analysis (doc-table split, join expectations, health score) treats them as metric views.
     ss = _reclassify_metric_views(req.serialized_space)
@@ -13896,7 +13896,7 @@ def genie_analyze(req: GenieAnalyzeRequest):
 
             gap_messages = [
                 {"role": "system", "content": (
-                    "You evaluate whether a Databricks Genie space can answer specific business questions. "
+                    "You evaluate whether a Databricks Genie Agent can answer specific business questions. "
                     "A question is 'fully answerable' (score 2) if the tables, joins, measures, and example SQL "
                     "provide enough structure for Genie to generate a correct query. "
                     "'Partially answerable' (score 1) means the data exists but joins or measures are missing. "
@@ -13904,7 +13904,7 @@ def genie_analyze(req: GenieAnalyzeRequest):
                     "Output JSON in ```json``` fences: {\"questions\": [{\"question\": \"...\", \"score\": 0|1|2, \"reason\": \"...\"}]}"
                 )},
                 {"role": "user", "content": (
-                    f"Genie space configuration:\n{space_config}\n\n"
+                    f"Genie Agent configuration:\n{space_config}\n\n"
                     f"Sample questions to evaluate:\n" +
                     "\n".join(f"{i+1}. {q}" for i, q in enumerate(sample_q_texts)) +
                     "\n\nRate each question 0-2 and explain why."
@@ -13961,7 +13961,7 @@ def genie_analyze(req: GenieAnalyzeRequest):
                 }, indent=2)
                 messages = [
                     {"role": "system", "content": (
-                        "You analyze Databricks Genie space configurations and suggest specific improvements. "
+                        "You analyze Databricks Genie Agent configurations and suggest specific improvements. "
                         "IMPORTANT distinctions:\n"
                         "- 'analytical_tables' are fact/dimension tables that need joins, example SQL, and measures.\n"
                         "- 'document_tables' are RAG/document pipeline tables (chunks, embeddings, parsed docs) -- "
@@ -13972,7 +13972,7 @@ def genie_analyze(req: GenieAnalyzeRequest):
                         "Output a JSON array of objects with keys: section, severity (high/medium/low), message, action."
                     )},
                     {"role": "user", "content": (
-                        f"Analyze this Genie space for gaps.\n\nSpace summary:\n{space_summary}\n\n"
+                        f"Analyze this Genie Agent for gaps.\n\nSpace summary:\n{space_summary}\n\n"
                         f"Metadata context (first 4000 chars):\n{ctx['context_text'][:4000]}\n\n"
                         f"Weak areas: {', '.join(weak_dims)}\n\n"
                         f"Return 3-5 specific, actionable suggestions as a JSON array in ```json``` fences."
@@ -14014,7 +14014,7 @@ _SECTION_TO_ROUTING_KEYWORDS: dict[str, list[str]] = {
 
 @app.post("/api/genie/improve")
 def genie_improve(req: GenieImproveRequest):
-    """Analyze a Genie space, then feed the analysis back through the agent to produce an improved version."""
+    """Analyze a Genie Agent, then feed the analysis back through the agent to produce an improved version."""
     wh = os.environ.get("WAREHOUSE_ID", "")
     if not wh:
         raise HTTPException(500, detail="WAREHOUSE_ID not configured")
@@ -14162,7 +14162,7 @@ def genie_improve(req: GenieImproveRequest):
 
 
 # ---------------------------------------------------------------------------
-# Genie Space version history
+# Genie Agent version history
 # ---------------------------------------------------------------------------
 
 
@@ -14187,7 +14187,7 @@ def _ensure_genie_versions_table():
 
 @app.get("/api/genie/spaces/{space_id}/versions")
 def list_genie_space_versions(space_id: str):
-    """List all version snapshots for a Genie space."""
+    """List all version snapshots for a Genie Agent."""
     _ensure_genie_versions_table()
     rows = execute_sql(
         f"SELECT version, title, updated_at, updated_by, length(serialized_space_json) as json_size "
@@ -14233,7 +14233,7 @@ def get_genie_space_live(space_id: str):
 
 
 # ---------------------------------------------------------------------------
-# Genie Space tracking endpoints
+# Genie Agent tracking endpoints
 # ---------------------------------------------------------------------------
 
 def _ensure_genie_tracking_table():
@@ -14308,7 +14308,7 @@ def _parse_serialized_space(raw) -> dict:
 
 @app.get("/api/genie/spaces/{space_id}/definition")
 def get_genie_space_definition(space_id: str):
-    """Return the full serialized_space for a Genie space.
+    """Return the full serialized_space for a Genie Agent.
 
     Checks the tracked genie_spaces table first (has config_json).
     Falls back to fetching live from the Databricks Genie API.
@@ -14376,7 +14376,7 @@ def get_genie_space_definition(space_id: str):
             "_debug": {"source": "live_api", "config_json_type": cj_type, "config_json_len": cj_len, "parsed_keys": list(ss.keys())[:10], "raw_resp_keys": list(resp.keys())[:15], "ss_raw_type": type(ss_raw).__name__, "backfilled": tracked_row is not None and bool(ss)},
         }
     except Exception as e:
-        raise HTTPException(404, detail=f"Could not load Genie space {space_id}: {e}")
+        raise HTTPException(404, detail=f"Could not load Genie Agent {space_id}: {e}")
 
 
 @app.delete("/api/genie/spaces/{space_id}")
@@ -14386,7 +14386,7 @@ def delete_genie_space(space_id: str):
         ws = _get_effective_client()
         ws.api_client.do("DELETE", f"/api/2.0/genie/spaces/{space_id}")
     except Exception as e:
-        logger.warning("Could not delete Genie space %s from Databricks: %s", space_id, e)
+        logger.warning("Could not delete Genie Agent %s from Databricks: %s", space_id, e)
     execute_sql(
         f"UPDATE {fq('genie_spaces')} SET deleted_at = current_timestamp() "
         f"WHERE space_id = '{space_id}' AND deleted_at IS NULL",
@@ -15146,7 +15146,7 @@ Return ONLY the paragraph text."""
 
 
 # ---------------------------------------------------------------------------
-# Genie SQL pull (items 14/15) -- app-native, no job. Lists Genie spaces so the
+# Genie SQL pull (items 14/15) -- app-native, no job. Lists Genie Agents so the
 # user can pinpoint one at metric-view build time, then pulls its curated example
 # SQL into genie_sql_examples (CDF) + a VS index for Phase-15 retrieval. All via
 # the Statement Execution API + Vector Search SDK (no Spark/cluster).
@@ -15162,11 +15162,11 @@ class PullGenieSQLRequest(BaseModel):
 
 @app.get("/api/genie/available-spaces")
 def list_genie_available_spaces():
-    """List Genie spaces (id/title/description) so the UI can offer a picker for
+    """List Genie Agents (id/title/description) so the UI can offer a picker for
     the 'pull curated SQL' action at metric-view build time."""
     from dbxmetagen.genie_sql_puller import GenieSQLPuller, GenieSQLPullerConfig
     try:
-        # Use the OBO-aware client: listing Genie spaces needs the caller's
+        # Use the OBO-aware client: listing Genie Agents needs the caller's
         # dashboards.genie scope. The app service principal has no Genie access,
         # so get_workspace_client() returns an empty list even when the user can
         # see many spaces. Every other Genie endpoint uses _get_effective_client().
@@ -15177,7 +15177,7 @@ def list_genie_available_spaces():
         spaces = puller.list_spaces()
     except Exception as e:
         logger.warning("list_genie_available_spaces failed: %s", e)
-        raise HTTPException(502, detail=f"Could not list Genie spaces: {e}")
+        raise HTTPException(502, detail=f"Could not list Genie Agents: {e}")
     return {"spaces": [
         {"space_id": s.get("space_id"), "title": s.get("title"),
          "description": (s.get("description") or "")[:300]}
@@ -15187,7 +15187,7 @@ def list_genie_available_spaces():
 
 @app.post("/api/semantic-layer/pull-genie-sql")
 def pull_genie_sql(req: PullGenieSQLRequest):
-    """Pull curated example SQL from the chosen Genie space(s) into
+    """Pull curated example SQL from the chosen Genie Agent(s) into
     genie_sql_examples (CDF) and (re)build the genie_examples_vs_index -- all
     in-app via execute_sql + the Vector Search SDK. Returns counts + index info."""
     from dbxmetagen.genie_sql_puller import (

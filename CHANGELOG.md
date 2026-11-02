@@ -10,8 +10,8 @@
 - **Similarity edges ANN path**: Full ANN similarity via Vector Search with automatic cross-join fallback and method telemetry reporting
 - **Customer context enrichment**: Optional customer/industry context injected into LLM prompts for more relevant metadata generation
 - **Deep analysis agent quality**: Improved GraphRAG retrieval, tool selection, and answer synthesis; MLflow trace link below agent chat input
-- **Genie space builder**: Full-featured in-app Genie builder with 3-phase LLM agent, FK/ontology/MV join merging, schema normalization, deploy retries, and join validation
-- **Semantic layer / metric views**: Generate, validate, and apply metric views to Unity Catalog; optional Genie space creation from applied views
+- **Genie Agent builder**: Full-featured in-app Genie builder with 3-phase LLM agent, FK/ontology/MV join merging, schema normalization, deploy retries, and join validation
+- **Semantic layer / metric views**: Generate, validate, and apply metric views to Unity Catalog; optional Genie Agent creation from applied views
 - **MCP server setup**: Job and documentation for configuring Unity Catalog MCP servers with IoT example bundle
 - **Notebook deployment pipeline**: No-CLI deployment via Databricks notebooks (NB01 jobs/infra, NB02 app/permissions) with `variables.yml` defaults, policy support, and OBO configuration
 - **Entity browser**: Entity-first navigation with conformance view in the dashboard

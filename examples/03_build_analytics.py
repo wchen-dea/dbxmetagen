@@ -8,7 +8,7 @@
 # MAGIC
 # MAGIC This is where dbxmetagen goes beyond descriptions -- it discovers relationships
 # MAGIC between tables (FK prediction), classifies columns into ontology entities,
-# MAGIC and scores data quality. All of this feeds into Genie space generation.
+# MAGIC and scores data quality. All of this feeds into Genie Agent generation.
 # MAGIC
 # MAGIC **Prerequisites:** Run `02_build_knowledge_bases` first.
 

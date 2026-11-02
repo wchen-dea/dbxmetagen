@@ -1,17 +1,17 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC # Step 5: Create Genie Spaces
+# MAGIC # Step 5: Create Genie Agents
 # MAGIC
-# MAGIC This is the payoff -- creates Genie spaces from all the metadata, knowledge bases,
+# MAGIC This is the payoff -- creates Genie Agents from all the metadata, knowledge bases,
 # MAGIC FK predictions, ontology, and metric views built in previous steps.
 # MAGIC
 # MAGIC The `build_genie_space` function:
 # MAGIC 1. Assembles context from your metadata artifacts (KB, FKs, ontology, metrics)
 # MAGIC 2. Runs a 3-phase LLM agent to generate instructions, SQL snippets, and synonyms
-# MAGIC 3. Creates the Genie space via REST API
+# MAGIC 3. Creates the Genie Agent via REST API
 # MAGIC 4. Exports the space JSON to a UC Volume for backup/versioning
 # MAGIC
-# MAGIC **Auto-splitting:** Genie spaces degrade above ~25 tables. When the table count
+# MAGIC **Auto-splitting:** Genie Agents degrade above ~25 tables. When the table count
 # MAGIC exceeds the limit, this notebook groups tables by ontology entity type and creates
 # MAGIC one space per group. FK-connected groups are merged to keep joinable tables together.
 # MAGIC
@@ -148,9 +148,9 @@ for name, tbls in space_groups.items():
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## Build and Create Genie Spaces
+# MAGIC ## Build and Create Genie Agents
 # MAGIC
-# MAGIC Each group gets its own Genie space. The 3-phase LLM agent generates:
+# MAGIC Each group gets its own Genie Agent. The 3-phase LLM agent generates:
 # MAGIC 1. **Core config:** title, description, instructions
 # MAGIC 2. **SQL snippets:** pre-built queries for common questions
 # MAGIC 3. **Synonyms and joins:** column aliases and join specifications from FK predictions
@@ -216,7 +216,7 @@ for entry in results:
 
 # COMMAND ----------
 
-print(f"\nGenie spaces created: {len(results)}")
+print(f"\nGenie Agents created: {len(results)}")
 for entry in results:
     r = entry["result"]
     print(f"  [{entry['group']}] {r.get('space_id','?')} -- {r['title']} ({len(entry['tables'])} tables)")

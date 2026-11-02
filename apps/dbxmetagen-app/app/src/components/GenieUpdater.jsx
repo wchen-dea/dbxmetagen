@@ -1167,7 +1167,7 @@ export default function GenieUpdater({ spaceId, onBack }) {
 
   return (
     <div className="space-y-4">
-      <PageHeader title="Edit Genie Space"
+      <PageHeader title="Edit Genie Agent"
         subtitle={`Space ID: ${spaceId}`}
         badge={tracked ? 'Tracked' : 'Untracked'}
         actions={
@@ -1225,7 +1225,7 @@ export default function GenieUpdater({ spaceId, onBack }) {
               dbxmetagen accelerates you to a solid starting space; it isn't a deep Genie optimizer.
               For further tuning, see Genie best practices
               (<a href="https://docs.databricks.com/aws/en/genie/best-practices" target="_blank" rel="noopener noreferrer"
-                 className="text-indigo-600 dark:text-indigo-400 hover:underline">curate an effective Genie space</a>
+                 className="text-indigo-600 dark:text-indigo-400 hover:underline">curate an effective Genie Agent</a>
               {' '}&middot;{' '}
               <a href="https://docs.databricks.com/aws/en/genie/" target="_blank" rel="noopener noreferrer"
                  className="text-indigo-600 dark:text-indigo-400 hover:underline">Genie docs</a>)

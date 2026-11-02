@@ -1,4 +1,4 @@
-"""Programmatic Genie space generation from dbxmetagen metadata.
+"""Programmatic Genie Agent generation from dbxmetagen metadata.
 
 Public API:
     assemble_genie_context  -- gather KB/FK/ontology/MV metadata into context
@@ -62,14 +62,14 @@ def build_genie_space(
     create: bool = True,
     ws: Optional[WorkspaceClient] = None,
 ) -> Dict[str, Any]:
-    """End-to-end: assemble context -> 3-phase LLM agent -> validate -> optionally create Genie space.
+    """End-to-end: assemble context -> 3-phase LLM agent -> validate -> optionally create Genie Agent.
 
     Args:
         warehouse_id: SQL warehouse ID.
         catalog: Unity Catalog catalog name.
         schema: Unity Catalog schema name.
         table_identifiers: FQN table identifiers.
-        title: Display name for the Genie space.
+        title: Display name for the Genie Agent.
         questions: Optional sample business questions.
         metric_view_names: Optional filter to specific metric views.
         model_endpoint: LLM endpoint for generation (default: databricks-claude-sonnet-4-6).
@@ -91,7 +91,7 @@ def build_genie_space(
 
     space_json = build_serialized_space(raw)
 
-    auto_desc = description or raw.get("description", f"Genie space for {catalog}.{schema}")
+    auto_desc = description or raw.get("description", f"Genie Agent for {catalog}.{schema}")
 
     if not create:
         return {"title": title, "description": auto_desc, "serialized_space": space_json}
@@ -104,7 +104,7 @@ def build_genie_space(
     }
     resp = ws.api_client.do("POST", "/api/2.0/genie/spaces", body=payload)
     space_id = resp.get("space_id", resp.get("id"))
-    logger.info("Created Genie space '%s' (%s)", title, space_id)
+    logger.info("Created Genie Agent '%s' (%s)", title, space_id)
 
     return {
         "space_id": space_id,

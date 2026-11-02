@@ -531,7 +531,7 @@ export default function SemanticLayer({ onNavigate, pipelineStats, onRefreshPipe
   const [businessContext, setBusinessContext] = useState('')
   const [bizCtxLoading, setBizCtxLoading] = useState(false)
   const [bizCtxUseKb, setBizCtxUseKb] = useState(true)
-  // Genie SQL pull (items 14/15): pick an existing Genie space and pull its
+  // Genie SQL pull (items 14/15): pick an existing Genie Agent and pull its
   // curated example SQL to seed metric-view generation with proven query patterns.
   const [genieSpaces, setGenieSpaces] = useState(null)  // null=unloaded, []=loaded-empty
   const [genieSpacesLoading, setGenieSpacesLoading] = useState(false)
@@ -1006,26 +1006,26 @@ export default function SemanticLayer({ onNavigate, pipelineStats, onRefreshPipe
     }
   }
 
-  // Lazy-load the list of Genie spaces the first time the picker is opened.
+  // Lazy-load the list of Genie Agents the first time the picker is opened.
   const loadGenieSpaces = async () => {
     if (genieSpaces !== null || genieSpacesLoading) return
     setGenieSpacesLoading(true)
     try {
       const res = await fetch('/api/genie/available-spaces')
-      if (!res.ok) { const d = await res.json().catch(() => ({})); setError(d.detail || 'Could not list Genie spaces'); setGenieSpaces([]); return }
+      if (!res.ok) { const d = await res.json().catch(() => ({})); setError(d.detail || 'Could not list Genie Agents'); setGenieSpaces([]); return }
       const data = await res.json()
       setGenieSpaces(data.spaces || [])
     } catch (e) {
-      setError(e.message || 'Could not list Genie spaces'); setGenieSpaces([])
+      setError(e.message || 'Could not list Genie Agents'); setGenieSpaces([])
     } finally {
       setGenieSpacesLoading(false)
     }
   }
 
-  // Pull curated example SQL from the selected Genie space(s) into the
+  // Pull curated example SQL from the selected Genie Agent(s) into the
   // genie_examples index so generation can retrieve proven query patterns.
   const pullGenieSql = async () => {
-    if (!genieSelectedSpaces.length) { setError('Select at least one Genie space'); return }
+    if (!genieSelectedSpaces.length) { setError('Select at least one Genie Agent'); return }
     setGeniePullLoading(true); setGeniePullStatus(null); setError(null)
     try {
       const res = await fetch('/api/semantic-layer/pull-genie-sql', {
@@ -2083,20 +2083,20 @@ export default function SemanticLayer({ onNavigate, pipelineStats, onRefreshPipe
           placeholder={"e.g. We are a B2B SaaS company focused on enterprise sales. Key metrics: ARR, net revenue retention, pipeline velocity. Our fiscal year starts in February."}
           className={`${input} h-20 mb-4`} />
 
-        {/* Seed from an existing Genie space (items 14/15): pull its curated
+        {/* Seed from an existing Genie Agent (items 14/15): pull its curated
             example SQL so generation reuses proven measures/dimensions/joins. */}
         <details className="mb-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50/60 dark:bg-slate-800/30 group" onToggle={e => { if (e.target.open) loadGenieSpaces() }}>
           <summary className="px-3 py-2 text-sm font-medium cursor-pointer select-none flex items-center gap-1.5 text-slate-700 dark:text-slate-200">
             <svg className="w-3 h-3 transition-transform group-open:rotate-90 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-            Seed from a Genie space <span className="text-xs font-normal text-slate-400">(optional — reuse curated SQL as proven patterns)</span>
+            Seed from a Genie Agent <span className="text-xs font-normal text-slate-400">(optional — reuse curated SQL as proven patterns)</span>
           </summary>
           <div className="px-3 pb-3 space-y-2">
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Pull the curated example SQL &amp; benchmarks from an existing Genie space. Generation then treats them as proven query patterns — reusing the measures, dimensions, grains, and joins that already work — to build metric views that cover a data-mart layer without changing the Genie space.
+              Pull the curated example SQL &amp; benchmarks from an existing Genie Agent. Generation then treats them as proven query patterns — reusing the measures, dimensions, grains, and joins that already work — to build metric views that cover a data-mart layer without changing the Genie Agent.
             </p>
-            {genieSpacesLoading && <p className="text-xs text-slate-400">Loading Genie spaces…</p>}
+            {genieSpacesLoading && <p className="text-xs text-slate-400">Loading Genie Agents…</p>}
             {genieSpaces !== null && genieSpaces.length === 0 && !genieSpacesLoading && (
-              <p className="text-xs text-amber-600 dark:text-amber-400">No Genie spaces found in this workspace.</p>
+              <p className="text-xs text-amber-600 dark:text-amber-400">No Genie Agents found in this workspace.</p>
             )}
             {genieSpaces !== null && genieSpaces.length > 0 && (
               <div className="max-h-40 overflow-y-auto border dark:border-slate-600 rounded-md p-2 space-y-0.5">
@@ -2164,7 +2164,7 @@ export default function SemanticLayer({ onNavigate, pipelineStats, onRefreshPipe
         <div className="flex items-center justify-between mb-3">
           <div>
             <h2 className="text-lg font-semibold dark:text-gray-100">KPI Library</h2>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Define or auto-suggest business KPIs from your selected tables. KPIs feed into metric view generation and Genie space configuration. Run multiple times for broader coverage -- each pass generates different KPIs.</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Define or auto-suggest business KPIs from your selected tables. KPIs feed into metric view generation and Genie Agent configuration. Run multiple times for broader coverage -- each pass generates different KPIs.</p>
             {/* Use the visible KPI count (kpis.length) for `current`, not the backend's
                 profile-scoped COUNT(*) which can read 0 while the library shows several
                 (the "0 of ~8" bug). Recommend more only when the visible count is under
@@ -3072,7 +3072,7 @@ export default function SemanticLayer({ onNavigate, pipelineStats, onRefreshPipe
                     </div>
                   )}
                   {d.genie_space_id && (
-                    <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-1">Genie space: {d.genie_space_id}</p>
+                    <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-1">Genie Agent: {d.genie_space_id}</p>
                   )}
                   {expandedDef === d.definition_id && expandedJson && (
                     <div className="mt-2 space-y-2">

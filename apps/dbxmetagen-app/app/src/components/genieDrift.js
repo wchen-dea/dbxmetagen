@@ -1,4 +1,4 @@
-// Pure helpers for Genie space external-edit ("drift") detection.
+// Pure helpers for Genie Agent external-edit ("drift") detection.
 //
 // Extracted from GenieUpdater.jsx so they can be unit-tested without a React /
 // bundler test harness (see genieDrift.test.mjs, runnable with plain `node`).

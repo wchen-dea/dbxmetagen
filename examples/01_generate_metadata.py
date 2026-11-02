@@ -4,13 +4,13 @@
 # MAGIC
 # MAGIC Runs AI-powered metadata generation on your Unity Catalog tables. This step runs
 # MAGIC **all three modes** to produce the richest possible metadata for downstream analytics
-# MAGIC and Genie space creation:
+# MAGIC and Genie Agent creation:
 # MAGIC
 # MAGIC 1. **comment** -- Table and column descriptions using LLM analysis of data samples
 # MAGIC 2. **pi** -- PII/PHI/PCI classification for every column
 # MAGIC 3. **domain** -- Business domain classification for each table
 # MAGIC
-# MAGIC Running all modes is what gives Genie spaces their context: descriptions power the
+# MAGIC Running all modes is what gives Genie Agents their context: descriptions power the
 # MAGIC instructions, PII flags inform access guardrails, and domain classification drives
 # MAGIC ontology grouping and space auto-splitting.
 # MAGIC

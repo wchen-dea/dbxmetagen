@@ -43,7 +43,7 @@ databricks jobs run-now -p DMVM --json '{"job_id": ..., "job_parameters": [...]}
 
 **What:** Python library + Databricks App for automated metadata generation on Unity Catalog tables.
 Uses LLMs to generate comments, detect PII, classify domains, build knowledge graphs, predict FKs,
-generate metric views, and create Genie spaces.
+generate metric views, and create Genie Agents.
 
 **Key entry points:**
 
@@ -53,7 +53,7 @@ generate metric views, and create Genie spaces.
 | `src/dbxmetagen/processing.py` | Core pipeline (~3500 lines): chunking, sampling, DDL generation, persistence |
 | `src/dbxmetagen/ddl_regenerator.py` | DDL review workflow: load TSV/Excel, replace comments/tags, export SQL, apply |
 | `src/dbxmetagen/fk_prediction.py` | FK candidate generation, scoring, AI judgment, direction enforcement |
-| `src/dbxmetagen/semantic_layer.py` | Metric view generation, SQL autofix, Genie space context |
+| `src/dbxmetagen/semantic_layer.py` | Metric view generation, SQL autofix, Genie Agent context |
 | `apps/dbxmetagen-app/app/api_server.py` | FastAPI backend (~7300 lines, ~100 endpoints) |
 | `apps/dbxmetagen-app/app/src/App.jsx` | React frontend entry point |
 

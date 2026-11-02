@@ -12,7 +12,7 @@ Scope / consumption (by design):
 
     It is deliberately NOT wired into the main knowledge graph, Genie context
     assembly, or the Lakebase sync: those surfaces operate on the raw metadata /
-    KG (``graph_nodes`` / ``graph_edges``) and the Genie space is assembled from
+    KG (``graph_nodes`` / ``graph_edges``) and the Genie Agent is assembled from
     metric-view definitions directly. So the semantic graph being separate from
     Lakebase/Genie is correct, not a gap. Dedup (seen_nodes/seen_edges +
     dropDuplicates + idempotent MERGE) is handled here and is safe across re-runs.

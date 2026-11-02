@@ -17,7 +17,7 @@ That's it. Each notebook `%pip install`s dbxmetagen from GitHub `main` and resta
 - A Databricks workspace with Unity Catalog enabled
 - Access to a foundation model endpoint (default: `databricks-claude-sonnet-4-6`)
 - Tables you want to generate metadata for
-- A SQL warehouse ID (for Genie space creation in step 05)
+- A SQL warehouse ID (for Genie Agent creation in step 05)
 
 ## Pipeline
 
@@ -29,7 +29,7 @@ Run the notebooks in order. Each step depends on the outputs of the previous ste
 | `02_build_knowledge_bases` | Structured KB tables from raw metadata | `table_knowledge_base`, `column_knowledge_base`, `schema_knowledge_base`, `extended_metadata` |
 | `03_build_analytics` | Graph, ontology, embeddings, profiling, FK prediction, quality | `graph_nodes`, `graph_edges`, `ontology_entities`, `ontology_relationships`, `fk_predictions`, `data_quality_scores` (embeddings are stored in the `graph_nodes.embedding` column, not a separate table) |
 | `04_generate_semantic_layer` | Metric view definitions from business questions | `metric_view_definitions`, `semantic_layer_questions` |
-| `05_create_genie_spaces` | Genie spaces with auto-splitting for large schemas | Genie space(s) + JSON exports in UC Volume |
+| `05_create_genie_spaces` | Genie Agents with auto-splitting for large schemas | Genie Agent(s) + JSON exports in UC Volume |
 
 ## Configuration
 
@@ -42,7 +42,7 @@ All notebooks share configuration via `helpers/common.py` (loaded with `%run`). 
 | `schema_name` | No | `metadata_results` | Output schema for metadata tables |
 | `model_endpoint` | No | `databricks-claude-sonnet-4-6` | Foundation model endpoint |
 | `ontology_bundle` | No | `general` | `general`, `healthcare`, `financial_services`, `retail_cpg` |
-| `warehouse_id` | For step 05 | -- | SQL warehouse for Genie spaces |
+| `warehouse_id` | For step 05 | -- | SQL warehouse for Genie Agents |
 | `volume_name` | No | `generated_metadata` | UC Volume for exports |
 
 ## Compute Requirements
